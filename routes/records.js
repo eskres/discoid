@@ -15,19 +15,35 @@ const IsLoggedIn = require('../helper/isLoggedIn');
 
 
 const multer = require('multer');
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/albumCover/')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + '-' + file.originalname)
+
+// Removed to enable enable cloudinary uploads for deployment
+// 
+// var storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './public/albumCover/')
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.fieldname + '-' + Date.now() + '-' + file.originalname)
+//     }
+//   })
+//   let upload = multer({ storage: storage })
+
+// Configuring multer to verify file size and file type prior to cloudinary uploads for deployment
+let upload = multer({
+  limits: {fileSize: 4_000_000},
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
-  })
-  let upload = multer({ storage: storage })
+  }
+})
 
 // Routes
 router.get("/records/sell", IsLoggedIn, recordsCntrl.record_create_get);
-router.post("/records/sell", upload.single('image'),recordsCntrl.record_create_post);
+router.post("/records/sell", upload.single('image'), recordsCntrl.record_create_post);
 router.get("/records/index", recordsCntrl.record_index_get);
 router.get("/records/detail", recordsCntrl.record_show_get);
 router.get("/records/delete", IsLoggedIn, recordsCntrl.record_delete_get);

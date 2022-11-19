@@ -15,6 +15,7 @@
         "bcrypt": "^5.0.1",
         "body-parser": "^1.20.0",
         "bootstrap-icons": "^1.9.1",
+        "cloudinary": "^1.32.0",
         "connect-flash": "^0.1.1",
         "connect-mongo": "^4.6.0",
         "dotenv": "^16.0.2",
@@ -29,6 +30,7 @@
         "passport": "^0.6.0",
         "passport-local": "^1.0.0",
         "spotify-web-api-node": "^5.0.2",
+        "streamifier": "^0.1.1",
         "stripe": "^10.8.0"
     }
 }

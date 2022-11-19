@@ -7,6 +7,17 @@ const axios = require('axios')
 // Require Moment Library
 const moment = require('moment');
 const { application } = require("express");
+// Require cloudinary library
+const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
+
+// Configure cloudinary
+cloudinary.config({ 
+    cloud_name: process.env.cloudinary_name,
+    api_key: process.env.cloudinary_api_key,
+    api_secret: process.env.cloudinary_api_secret,
+    secure: true
+  });
 
 // CRUD
 
@@ -29,6 +40,38 @@ exports.record_create_get = (req, res) => {
     })
 }
 
+//  **** REWRITING THE API BELOW TO USE CLOUDINARY DUE TO SECURITY CONCERNS REGARDING DEPLOYMENT ****
+
+// HTTP POST - Record
+// exports.record_create_post = (req, res) => {
+//     // Saving the data into the Database
+//     let record = new Record(req.body);
+//     console.log(req.body);
+//     console.log(req.file);
+//     if (req.file!==undefined){
+//         let imagePath = '/albumCover/' + req.file.filename;
+//         record.albumCover= imagePath;
+//     } else {
+//         let imagePath = "https://via.placeholder.com/400"
+//         record.albumCover= imagePath;
+//     }
+//     record.save()
+//     .then(() => {
+//         console.log(req.body.record);
+//             User.findById(req.body.user, (error, user) => {
+//                 user.record.push(record);
+//                 user.save();
+//             })
+//         res.redirect("/records/index");
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//         res.send("Please try again later!!!");
+//     })
+// }
+
+// **** NEW API USING CLOUDINARY HERE ****
+
 // HTTP POST - Record
 exports.record_create_post = (req, res) => {
     // Saving the data into the Database
@@ -36,11 +79,31 @@ exports.record_create_post = (req, res) => {
     console.log(req.body);
     console.log(req.file);
     if (req.file!==undefined){
-        let imagePath = '/albumCover/' + req.file.filename;
-        record.albumCover= imagePath;
+        // let imagePath = '/albumCover/' + req.file.filename;
+        // record.albumCover= imagePath;
+        let streamUpload = (req) => {
+            return new Promise((resolve, reject) => {
+                let stream = cloudinary.uploader.upload_stream(
+                  (error, result) => {
+                    if (result) {
+                      resolve(result);
+                    } else {
+                      reject(error);
+                    }
+                  }
+                );
+              streamifier.createReadStream(req.file.buffer).pipe(stream);
+            });
+        };
+        async function upload(req) {
+            let result = await streamUpload(req);
+            record.albumCover = result.secure_url;
+            record.save()
+        }
+        upload(req);
+        console.log(record.albumCover);
     } else {
-        let imagePath = "https://via.placeholder.com/400"
-        record.albumCover= imagePath;
+        record.albumCover = "https://via.placeholder.com/400";
     }
     record.save()
     .then(() => {
@@ -56,7 +119,6 @@ exports.record_create_post = (req, res) => {
         res.send("Please try again later!!!");
     })
 }
-
 
 // HTTP GET - Record Index API
 exports.record_index_get = (req, res) => {

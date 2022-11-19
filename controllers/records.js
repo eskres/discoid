@@ -83,21 +83,21 @@ exports.record_create_post = (req, res) => {
         // record.albumCover= imagePath;
         let streamUpload = (req) => {
             return new Promise((resolve, reject) => {
-                let stream = cloudinary.uploader.upload_stream(
+                let stream = cloudinary.uploader.upload_stream({ eager: [{ width: 400, height: 400, crop: "limit" }]},
                   (error, result) => {
                     if (result) {
                       resolve(result);
                     } else {
                       reject(error);
                     }
-                  }
-                );
+                  });
               streamifier.createReadStream(req.file.buffer).pipe(stream);
             });
         };
         async function upload(req) {
             let result = await streamUpload(req);
-            record.albumCover = result.secure_url;
+            console.log(result);
+            record.albumCover = result.eager[0].secure_url;
             record.save()
         }
         upload(req);

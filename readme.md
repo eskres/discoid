@@ -70,14 +70,12 @@ We worked collaboratively throughout the project, remaining on Zoom, discussing 
 We started by laying out the folder structure, installing dependencies, configuring server.js and creating the files that we would be working on.
 
 ### Stage 2
-Once our environment was ready we moved on to coding. Ivan worked on models and routes and I started out on our writing APIs in controllers plus some basic views.
+Once our environment was ready we moved on to building the project's functionality. Ivan worked on the models and routes and I started out on writing the APIs to provide CRUD functionality for our records collection in MongoDB as well as some basic views using EJS to match the APIs.
 
 ### Stage 3
-Ivan then started working on our front-end using Bootstrap and CSS while I moved on to implementing the Spotify API as a search function so that users could find data for a record while making listings as well as implementing cart functionality. This is the stage where I believe I wrote my most interesting pieces of code for this project.
+Ivan then started working on our front-end using Bootstrap and CSS while I moved on to implementing the Spotify API as a search function so that users could find data for a record while making listings. I then moved on to implementing cart functionality using express-session to store the cart. This is the stage of the project where I believe I wrote my most interesting pieces of code for this project.
 
 Below you will find some code snippets from the stages described above.
-
-
 
 ### Highlights
 #### Add to Cart

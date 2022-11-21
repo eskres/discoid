@@ -4,6 +4,10 @@ Completed during my 6th week on General Assembly\'s Software Engineering Immersi
 
 **Discoid is deployed at https://discoid.skreslett.com**
 
+You can experience Discoid by visiting the link above. Discoid does not require the installation of any additional software. You can visit the website and browse the test listings as well as add your own listing after signing in using the following credentials:
+- Username: test@skreslett.com
+- Password: Pa$$word123
+
 This project was completed as a pair within a week. My teammate was Ivan Craig and his repository for this project can be found [here](http://https://github.com/ic188002/Vinyl-Makert-Place "here").
 
 ---

@@ -35,19 +35,19 @@ This project was completed as a pair within a week. My teammate was Ivan Craig a
 
 Our brief was to create a web application of our choice from scratch in 7 days with the following requirements specified:
 - User resource
- - User must have a profile
- - User must be able to edit their profile
- - User must be able to change password
+    - User must have a profile
+    - User must be able to edit their profile
+    - User must be able to change password
 - Authentication
- - User must be able to sign up
- - User must be able to sign in
- - User must be able to sign out
+    - User must be able to sign up
+    - User must be able to sign in
+    - User must be able to sign out
 - 2 extra resources of your choice (other than User)
- - User must be able to create a resource
- - User must be able to edit a resource
- - User must be able to view all resources they created
- - User must be able to view a single resource they created
- - User must not be able to edit or delete other users' resources
+    - User must be able to create a resource
+    - User must be able to edit a resource
+    - User must be able to view all resources they created
+    - User must be able to view a single resource they created
+    - User must not be able to edit or delete other users' resources
 
 ---
 ## Planning

@@ -1,5 +1,7 @@
 # Discoid
 
+![Discoid Homepage](https://i.imgur.com/WGz60ri.png)
+
 Completed during my 6th week on General Assembly\'s Software Engineering Immersive, the concept for Discoid is that of an online marketplace specialising in the trading of vinyl records. This project was built using MongoDB, Express, Node.js, JavaScript, jQuery, Bootstrap, HTML and CSS.
 
 **Discoid is deployed at https://discoid.skreslett.com**

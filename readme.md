@@ -59,9 +59,20 @@ Our brief was to create a web application of our choice from scratch in 7 days w
 I suggested my first idea, an e-commerce store selling records, after a short discussion we agreed that we would work on this. We started our planning by working on wireframes (Ivan) and an ERD using Miro (myself) before working together to create a Kanban board using Trello. 
 We worked collaboratively throughout the project, remaining on Zoom, discussing and planning as needed. We shared the tasks by agreeing on our strengths. Ivan led the work on the wireframes as he had an interest in working creatively and developing the front-end, whilst I focussed on the back-end. These can be found below:
 
-# INSERT PLANNING
+#### ERD v1
+![ERD v1](https://i.imgur.com/xomJGNz.png)
 
+#### ERD v2
+![ERD v2](https://i.imgur.com/hOc20Pf.png)
 
+#### Sketches
+![Sketches](https://i.imgur.com/i1eTBUQ.png)
+
+#### Wireframes
+![Wireframes](https://i.imgur.com/W3L3mdi.png)
+
+#### Trello
+![Trello](https://i.imgur.com/Dxtqubl.png)
 
 ---
 ## Build Process

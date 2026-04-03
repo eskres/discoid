@@ -19,10 +19,7 @@ exports.payment_signup_get = (req, res) => {
 exports.payment_signup_post = (req, res) => {
     let user = new User(req.body);
 
-    console.log(req.body.password);
     let hash = bcrypt.hashSync(req.body.password, salt);
-    console.log(hash);
-
     user.password = hash;
 
     user.save()

@@ -25,16 +25,12 @@ exports.auth_signup_get = (req, res) => {
 // HTTP POST - Signup Route - To post the data into the database for registration
 exports.auth_signup_post = (req, res) => {
     let user = new User(req.body);
-    console.log(req.body);
-    console.log(req.file);
     
     if (req.file !== undefined) {
         user.profilePicture = '/albumCover/' + req.file.filename;
     }
  
     let hash = bcrypt.hashSync(req.body.password, salt);
-    console.log(hash);
-
     user.password = hash;
 
     user.save()

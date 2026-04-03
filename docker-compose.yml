@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    container_name: discoid
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - uploads:/app/public/uploads
+      - album_covers:/app/public/albumCover
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.discoid.rule=Host(`discoid.skreslett.com`)"
+      - "traefik.http.routers.discoid.entrypoints=websecure"
+      - "traefik.http.routers.discoid.tls=true"
+      - "traefik.http.routers.discoid.middlewares=security-headers@file,rate-limit@file,discoid-csp@docker"
+      - "traefik.http.middlewares.discoid-csp.headers.customResponseHeaders.Content-Security-Policy=default-src 'self'; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data: https://coverartarchive.org https://i.ibb.co https://res.cloudinary.com https://i.scdn.co; connect-src 'self'; frame-ancestors 'none';"
+      - "traefik.http.services.discoid.loadbalancer.server.port=3000"
+    restart: unless-stopped
+
+volumes:
+  uploads:
+  album_covers:
+
+networks:
+  proxy:
+    name: traefik_proxy
+    external: true

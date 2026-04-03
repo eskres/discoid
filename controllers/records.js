@@ -1,12 +1,12 @@
 //User Require Models
 const {Record} = require("../models/Record");
 const {User} = require("../models/User");
-var SpotifyWebApi = require('spotify-web-api-node');
-const axios = require('axios')
+const axios = require('axios');
 
 // Require Moment Library
 const moment = require('moment');
-const { application } = require("express");
+
+const MB_USER_AGENT = 'discoid/1.0 (https://github.com/eskres/discoid)';
 
 // CRUD
 
@@ -16,10 +16,8 @@ exports.record_create_get = (req, res) => {
     User.find()
     .then((users) => {
         if(req.query.title == null || req.query.title == "" || req.query.title == undefined){
-            console.log(req.query + "No q params");
             res.render("records/sell", {users, data:false})
         } else {
-            console.log(req.query + "Q params");
             let populateSell = req.query
             res.render("records/sell", {users, populateSell, data:true})
         }
@@ -33,22 +31,18 @@ exports.record_create_get = (req, res) => {
 exports.record_create_post = (req, res) => {
     // Saving the data into the Database
     let record = new Record(req.body);
-    console.log(req.body);
-    console.log(req.file);
-    if (req.file!==undefined){
-        let imagePath = '/albumCover/' + req.file.filename;
-        record.albumCover= imagePath;
-    } else {
-        let imagePath = "https://via.placeholder.com/400"
-        record.albumCover= imagePath;
+    if (req.file !== undefined) {
+        record.albumCover = '/albumCover/' + req.file.filename;
+    } else if (req.body.albumCover) {
+        record.albumCover = req.body.albumCover;
     }
     record.save()
     .then(() => {
-        console.log(req.body.record);
-            User.findById(req.body.user, (error, user) => {
+        User.findById(req.body.user)
+            .then(user => {
                 user.record.push(record);
                 user.save();
-            })
+            });
         res.redirect("/records/index");
     })
     .catch((err) => {
@@ -71,7 +65,6 @@ exports.record_index_get = (req, res) => {
 
 // HTTP GET - Record By Id
 exports.record_show_get = (req, res) => {
-    console.log(req.query.id);
     // Find the record by ID
     Record.findById(req.query.id).populate('user')
     .then(record => {
@@ -96,8 +89,6 @@ exports.record_edit_get = (req, res) => {
 
 // HTTP PUT - Record Update
 exports.record_update_put = (req, res) => {
-    console.log(req.body.id);
-
     Record.findByIdAndUpdate(req.body.id, req.body)
     .then(() => {
         res.redirect("/records/index");
@@ -110,8 +101,6 @@ exports.record_update_put = (req, res) => {
 // DELETE
 // HTTP DELETE - Record
 exports.record_delete_get = (req, res) => {
-    console.log(req.query.id);
-
     Record.findByIdAndDelete(req.query.id)
     .then(() => {
         res.redirect("/records/index");
@@ -121,54 +110,41 @@ exports.record_delete_get = (req, res) => {
     })
 }
 
-// GET SPOTIFY AUTH
-var spotifyApi = new SpotifyWebApi({
-    clientId: process.env.spotifyID,
-    clientSecret: process.env.spotifySecret,
-    redirectUri: `http://localhost:${process.env.PORT}`
-  });
-
-spotifyApi.clientCredentialsGrant().then(
-    function(data) {
-      console.log('Your Spotify access token expires in ' + data.body['expires_in'] + ' seconds');
-    //   console.log('The access token is ' + data.body['access_token']);
-      spotifyApi.setAccessToken(data.body['access_token']);
-    },
-    function(err) {
-      console.log('Something went wrong when retrieving an access token', err);
-    }
-);
-
-// SPOTIFY SEARCH
-exports.record_search_post = (req, res) => {
-    spotifyApi.searchAlbums(req.body.search, { limit: 20, offset: req.query.offset })
-    .then(function(data) {
-        // console.log('Album information', data.body)
-        res.render("records/search", {data})
-    })
-    .catch(err => {
+// MUSICBRAINZ SEARCH
+exports.record_search_post = async (req, res) => {
+    try {
+        const response = await axios.get('https://musicbrainz.org/ws/2/release/', {
+            headers: { 'User-Agent': MB_USER_AGENT },
+            params: { query: req.body.search, fmt: 'json', limit: 20, offset: 0 }
+        });
+        res.render("records/search", { data: response.data, query: req.body.search });
+    } catch (err) {
         console.log(err);
-    })
+    }
 }
 
-// SPOTIFY RESULTS NEXT PAGE
-exports.record_next_post = (req, res) => {
-        axios.get(req.body.next, { headers: { 'Authorization': 'Bearer' + ' ' + spotifyApi._credentials.accessToken } })
-        .then(response => {
-              const data = response.data;
-              res.render("records/page", {data});
-        }).catch(err => {
-              console.error(err);
-        })
+// MUSICBRAINZ RESULTS NEXT PAGE
+exports.record_next_post = async (req, res) => {
+    try {
+        const response = await axios.get('https://musicbrainz.org/ws/2/release/', {
+            headers: { 'User-Agent': MB_USER_AGENT },
+            params: { query: req.body.query, fmt: 'json', limit: 20, offset: req.body.offset }
+        });
+        res.render("records/search", { data: response.data, query: req.body.query });
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// SPOTIFY RESULTS PREV PAGE
-exports.record_prev_post = (req, res) => {
-    axios.get(req.body.prev, { headers: { 'Authorization': 'Bearer' + ' ' + spotifyApi._credentials.accessToken } })
-    .then(response => {
-          const data = response.data;
-          res.render("records/page", {data});
-    }).catch(err => {
-          console.error(err);
-    })
+// MUSICBRAINZ RESULTS PREV PAGE
+exports.record_prev_post = async (req, res) => {
+    try {
+        const response = await axios.get('https://musicbrainz.org/ws/2/release/', {
+            headers: { 'User-Agent': MB_USER_AGENT },
+            params: { query: req.body.query, fmt: 'json', limit: 20, offset: req.body.offset }
+        });
+        res.render("records/search", { data: response.data, query: req.body.query });
+    } catch (err) {
+        console.error(err);
+    }
 }

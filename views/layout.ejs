@@ -84,36 +84,13 @@
     <img src="/photos/footer.png" width="100%">
 
 
-    <script>
-        $(document).ready(function () {
-            let imagesPreview = function (input, placeToInsertImagePreview) {
-                if (input.files) {
-                    let filesAmount = input.files.length;
-                    for (i = 0; i < filesAmount; i++) {
-                        let reader = new FileReader();
-                        reader.onload = function (event) {
-                            $($.parseHTML("<img>"))
-                                .attr("src", event.target.result)
-                                .appendTo(placeToInsertImagePreview);
-                        };
-                        reader.readAsDataURL(input.files[i]);
-                    }
-                }
-            };
-            $("#input-files").on("change", function () {
-                imagesPreview(this, "div.preview-images");
-            });
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="/js/imagesPreview.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
         integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
         crossorigin="anonymous"></script>
     <!-- INSERT MAIN.JS HERE -->
-    <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBggvUnknNllejaTxnuwbgJ_ITfoTeYQEo&libraries=places&callback=initMap">
-        </script>
 </body>
 
 </html>

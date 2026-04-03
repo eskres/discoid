@@ -1,39 +1,48 @@
 <table class="table table-striped">
     <tr>
-        <th> Artwork </th>
-        <th> Title </th>
-        <th> Artist </th>
-        <th> Release Date</th>
+        <th>Artwork</th>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Release Date</th>
         <th></th>
     </tr>
-
-<% 
-const tmp = data.body.albums.items;
-const keys = Object.keys(data.body.albums.items);
-keys.forEach((key, index) => {
-let img = (tmp[key].images[2].url).replace(/\/+$/,"") %>
+<% data.releases.forEach(function(release) {
+    const artist = release['artist-credit']?.[0]?.artist?.name ?? 'Unknown';
+    const hasCover = release['cover-art-archive']?.front;
+    const coverUrl = hasCover ? `https://coverartarchive.org/release/${release.id}/front-250` : null;
+%>
     <tr>
-        <td><img src= <%= img %> /></td>
-        <td> <%= tmp[key].name %> </td>
-        <td> <%= tmp[key].artists[0].name %> </td>
-        <td> <%= tmp[key].release_date %> </td>
-        <td> <a href="/records/sell?title=<%= JSON.stringify(tmp[key].name) %>&artist=<%=tmp[key].artists[0].name%>&releaseDate=<%= tmp[key].release_date %>">SELECT</a></td>
+        <td><% if (coverUrl) { %><img src="<%= coverUrl %>" alt="Album cover" width="50px" /><% } %></td>
+        <td><%= release.title %></td>
+        <td><%= artist %></td>
+        <td><%= release.date ?? '' %></td>
+        <td>
+            <a href="/records/sell?title=<%= encodeURIComponent(release.title) %>&artist=<%= encodeURIComponent(artist) %>&releaseDate=<%= release.date ?? '' %>&albumCover=<%= encodeURIComponent(coverUrl) %>">SELECT</a>
+        </td>
     </tr>
 <% }) %>
 </table>
 
-<% if(data.body.albums.offset === 0){ %>
+<%
+    const offset = data.offset ?? 0;
+    const limit = 20;
+    const total = data['release-count'] ?? 0;
+    const prevOffset = offset - limit;
+    const nextOffset = offset + limit;
+%>
+
+<% if(prevOffset >= 0) { %>
+<form action="/records/prev" method="post">
+    <input type="hidden" name="query" value="<%= query %>">
+    <input type="hidden" name="offset" value="<%= prevOffset %>">
+    <button type="submit" class="btn btn-primary">Prev</button>
+</form>
+<% } %>
+
+<% if(nextOffset < total) { %>
 <form action="/records/next" method="post">
-    <input name="next" type="hidden" value= <%= data.body.albums.next %>>
+    <input type="hidden" name="query" value="<%= query %>">
+    <input type="hidden" name="offset" value="<%= nextOffset %>">
     <button type="submit" class="btn btn-primary">Next</button>
 </form>
-<% } else { %>
-    <form action="/records/prev" method="post">
-        <input name="prev" type="hidden" value= <%= data.body.albums.previous %>>
-        <button type="submit" class="btn btn-primary">Prev</button>
-    </form>
-    <form action="/records/next" method="post">
-        <input name="next" type="hidden" value= <%= data.body.albums.next %>>
-        <button type="submit" class="btn btn-primary">Next</button>
-    </form>
 <% } %>

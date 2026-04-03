@@ -4,8 +4,9 @@
     <% records.forEach(function(record){ %>
         <div class="cols">
             <div class="card">
-                <img class="card-img-top" src="<%= record.albumCover%>" alt="Card image cap" width="150px"
-                    height="350px">
+                <% if (record.albumCover) { %>
+                <img class="card-img-top" src="<%= record.albumCover %>" alt="Album cover" width="150px" height="350px">
+                <% } %>
                 <div class="cardbody card-body">
                     <a href="/records/detail?id=<%= record._id %>">
                         <h5 class="card-title">

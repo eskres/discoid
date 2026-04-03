@@ -24,6 +24,7 @@ This project was completed as a pair within a week. My teammate was Ivan Craig a
 | [Key Learnings](#Key-Learnings) |
 | [Bugs](#Bugs) |
 | [Future Improvements](#Future-Improvements) |
+| [2026 Changes](#2026-Changes) |
 
 ---
 ## Technologies Used
@@ -196,5 +197,20 @@ The only bug I am aware of is with regards to our Spotify access token timing ou
 ---
 ## Future Improvements
 In the future I would like to revisit this project and rewrite the Spotify API calls from scratch without using the wrapper and at the same time resolve the bug where our Spotify access token times out. I would also like to add test checkout functionality using Stripe.
+
+---
+## 2026 Changes
+
+Re-deploying this project in 2026 I wanted to address potential security issues, update the dependencies, and bring the deployment up to a standard I would be comfortable hosting on my server. Below is a summary of the changes made.
+
+- **Dependency updates** — I reviewed all dependencies, removing those that were no longer in use and updating the remainder to their latest versions. This involved several major version upgrades which required code changes, most notably rewriting callback-based database queries to use async/await.
+
+- **Spotify API → MusicBrainz** — Spotify now requires a Premium subscription to access their Web API, which broke the record search feature entirely. I replaced it with [MusicBrainz](https://musicbrainz.org/), with Album artwork sourced from the [Cover Art Archive](https://coverartarchive.org/). This also fixed the token expiry bug noted in the Bugs section above.
+
+- **General tidying** — I took the opportunity to clean up a number of small issues left over from the original build e.g. fixing typos and removing console log statements.
+
+- **Security improvements** — A Content Security Policy was added and several smaller issues identified during a security review were addressed, reducing the overall attack surface of the application.
+
+- **Docker deployment** — I containerised the application using Docker with a non-root user and a multi-stage aware configuration, and added a `docker-compose.yml` configured for deployment behind a Traefik reverse proxy.
 
 ---

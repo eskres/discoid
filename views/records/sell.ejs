@@ -61,10 +61,14 @@
     <label>Description</label>
     <textarea type="text" name="description" class="form-control input"></textarea>
 </div>
+<% if(data && populateSell.albumCover) { %>
+    <input type="hidden" name="albumCover" value="<%= decodeURIComponent(populateSell.albumCover) %>" />
+<% } else { %>
 <div class="form-group">
     <label>Album Cover</label>
     <input type="file" name="image" class="form-control input"></input>
 </div>
+<% } %>
 <input type="hidden" name="user" value="<%= currentUser._id %>" />
 <button type="submit" class="btn btn-primary">
     List for sale

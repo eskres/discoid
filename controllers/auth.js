@@ -28,12 +28,8 @@ exports.auth_signup_post = (req, res) => {
     console.log(req.body);
     console.log(req.file);
     
-    if (req.file!==undefined){
-        let imagePath = '/albumCover/' + req.file.filename;
-        user.profilePicture = imagePath;
-    } else {
-        let imagePath = "https://via.placeholder.com/400"
-        user.profilePicture = imagePath;
+    if (req.file !== undefined) {
+        user.profilePicture = '/albumCover/' + req.file.filename;
     }
  
     let hash = bcrypt.hashSync(req.body.password, salt);

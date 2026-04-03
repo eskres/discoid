@@ -45,10 +45,11 @@ exports.record_create_post = (req, res) => {
     record.save()
     .then(() => {
         console.log(req.body.record);
-            User.findById(req.body.user, (error, user) => {
+        User.findById(req.body.user)
+            .then(user => {
                 user.record.push(record);
                 user.save();
-            })
+            });
         res.redirect("/records/index");
     })
     .catch((err) => {

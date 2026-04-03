@@ -40,7 +40,7 @@ app.use(expressLayouts);
 let session = require('express-session');
 let passport = require('./helper/ppConfig');
 const { use } = require('./helper/ppConfig');
-const MongoStore = require('connect-mongo');
+const { MongoStore } = require('connect-mongo');
 
 app.use(session({
     secret: process.env.SECRET,
@@ -76,12 +76,9 @@ app.use('/', cartsRouter);
 app.set("view engine", "ejs");
 
 // Validate database Connection
-mongoose.connect(process.env.MongoDBURL,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => {
-        console.log("MongoDB connected!!!")
-    }
-);
+mongoose.connect(process.env.MongoDBURL)
+    .then(() => console.log("MongoDB connected!!!"))
+    .catch(err => console.log(err));
 
 // Validate server connection
 app.listen(PORT, () => {

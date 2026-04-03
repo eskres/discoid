@@ -16,10 +16,8 @@ exports.record_create_get = (req, res) => {
     User.find()
     .then((users) => {
         if(req.query.title == null || req.query.title == "" || req.query.title == undefined){
-            console.log(req.query + "No q params");
             res.render("records/sell", {users, data:false})
         } else {
-            console.log(req.query + "Q params");
             let populateSell = req.query
             res.render("records/sell", {users, populateSell, data:true})
         }
@@ -33,8 +31,6 @@ exports.record_create_get = (req, res) => {
 exports.record_create_post = (req, res) => {
     // Saving the data into the Database
     let record = new Record(req.body);
-    console.log(req.body);
-    console.log(req.file);
     if (req.file !== undefined) {
         record.albumCover = '/albumCover/' + req.file.filename;
     } else if (req.body.albumCover) {
@@ -42,7 +38,6 @@ exports.record_create_post = (req, res) => {
     }
     record.save()
     .then(() => {
-        console.log(req.body.record);
         User.findById(req.body.user)
             .then(user => {
                 user.record.push(record);
@@ -70,7 +65,6 @@ exports.record_index_get = (req, res) => {
 
 // HTTP GET - Record By Id
 exports.record_show_get = (req, res) => {
-    console.log(req.query.id);
     // Find the record by ID
     Record.findById(req.query.id).populate('user')
     .then(record => {
@@ -95,8 +89,6 @@ exports.record_edit_get = (req, res) => {
 
 // HTTP PUT - Record Update
 exports.record_update_put = (req, res) => {
-    console.log(req.body.id);
-
     Record.findByIdAndUpdate(req.body.id, req.body)
     .then(() => {
         res.redirect("/records/index");
@@ -109,8 +101,6 @@ exports.record_update_put = (req, res) => {
 // DELETE
 // HTTP DELETE - Record
 exports.record_delete_get = (req, res) => {
-    console.log(req.query.id);
-
     Record.findByIdAndDelete(req.query.id)
     .then(() => {
         res.redirect("/records/index");

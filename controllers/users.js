@@ -8,8 +8,6 @@ const moment = require('moment');
 
 // // HTTP GET - User By Id
 exports.user_show_get = (req, res) => {
-    console.log(req.user._id);
-    // Find the record by ID
     User.findById(req.user._id).populate('record')
     .then(user => {
         res.render("users/myaccount", {user, moment})
@@ -24,7 +22,6 @@ exports.user_show_get = (req, res) => {
 exports.user_edit_get = (req, res) => {
     User.findById(req.query.id)
     .then((user) => {
-        console.log(user);
         res.render("users/edit", {user})
     })
     .catch(err => {
@@ -34,7 +31,6 @@ exports.user_edit_get = (req, res) => {
 
 // HTTP PUT - User Update
 exports.user_update_put = (req, res) => {
-    console.log(req.body.id);
     User.findByIdAndUpdate(req.body.id, req.body)
     .then(() => {
         res.redirect("/users/myaccount");

@@ -4,14 +4,14 @@ const userSchema = mongoose.Schema({
     firstName: {
         type: String,
         required: true,
-        minlenght: [3, 'First Name must be more that 3 characters'],
-        maxlenght: [15, 'First Name must be less that 15 characters']
+        minlength: [3, 'First Name must be more that 3 characters'],
+        maxlength: [15, 'First Name must be less that 15 characters']
     },
     lastName: {
         type: String,
         required: true,
-        minlenght: [3, 'Last Name must be more that 3 characters'],
-        maxlenght: [15, 'Last Name must be less that 15 characters']
+        minlength: [3, 'Last Name must be more that 3 characters'],
+        maxlength: [15, 'Last Name must be less that 15 characters']
     },
     emailAddress: {
         type: String,
@@ -23,19 +23,19 @@ const userSchema = mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true,
-        minlenght: [11, 'Needs to be longer'],
+        minlength: [11, 'Needs to be longer'],
         unique: true,
     },
     password: {
         type: String,
         required: true,
-        minlenght: [8, 'need to be longer'],
+        minlength: [8, 'need to be longer'],
     },
     shippingAddress: {
          streetName: {
             type: String,
             required: true,
-            minlenght: [6, 'need to be longer'],
+            minlength: [6, 'need to be longer'],
         },
         townCity : {
             type : String,

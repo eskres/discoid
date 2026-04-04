@@ -203,14 +203,14 @@ In the future I would like to revisit this project and rewrite the Spotify API c
 
 Re-deploying this project in 2026 I wanted to address potential security issues, update the dependencies, and bring the deployment up to a standard I would be comfortable hosting on my server. Below is a summary of the changes made.
 
-- **Dependency updates** — I reviewed all dependencies, removing those that were no longer in use and updating the remainder to their latest versions. This involved several major version upgrades which required code changes, most notably rewriting callback-based database queries to use async/await.
+- **Dependency updates** — Removed unused dependencies and updated the rest. This involved several major version upgrades which required code changes e.g. rewriting callback-based database queries to use async/await.
 
-- **Spotify API → MusicBrainz** — Spotify now requires a Premium subscription to access their Web API, which broke the record search feature entirely. I replaced it with [MusicBrainz](https://musicbrainz.org/), with Album artwork sourced from the [Cover Art Archive](https://coverartarchive.org/). This also fixed the token expiry bug noted in the Bugs section above.
+- **Migrate from Spotify API to MusicBrainz** — Spotify now requires a Premium subscription to access their Web API, which broke the record search feature. I'm now using [MusicBrainz](https://musicbrainz.org/), with Album artwork sourced from the [Cover Art Archive](https://coverartarchive.org/). This also fixed the token expiry bug noted in the Bugs section above.
 
-- **General tidying** — I took the opportunity to clean up a number of small issues left over from the original build e.g. fixing typos and removing console log statements.
+- **General tidying** — Fixed typos and removed console log statements.
 
-- **Security improvements** — A Content Security Policy was added and several smaller issues identified during a security review were addressed, reducing the overall attack surface of the application.
+- **Security improvements** — Added a Content Security Policy with security headers handled by Traefik.
 
-- **Docker deployment** — I containerised the application using Docker with a non-root user and a multi-stage aware configuration, and added a `docker-compose.yml` configured for deployment behind a Traefik reverse proxy.
+- **Docker deployment** — Migrated the deployment to Docker with a multi-stage configuration behind a Traefik reverse proxy.
 
 ---
